@@ -2,14 +2,14 @@ package com.ite.spring.rest.api.controller;
 
 import com.ite.spring.rest.api.dto.CoffeeResponse;
 import com.ite.spring.rest.api.service.CoffeeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/coffees")
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
@@ -17,8 +17,30 @@ public class CoffeeController {
         this.coffeeService = coffeeService;
     }
 
-    @GetMapping("/v1/coffees")
+    @GetMapping
     public List <CoffeeResponse> getCoffees() {
         return coffeeService.getCoffees();
     }
+
+    @GetMapping("/{id}")
+//    use to catch data from URI,unique data
+    public CoffeeResponse getCoffeeById(@PathVariable Long id ) {
+        log.info("GET id: {}", id);
+        return coffeeService.getCoffeeById(id);
+    }
+
+//    user for mark on parameter on mapping method,general data
+    @GetMapping("/search")
+    public List <CoffeeResponse> searchCoffeeByName(
+            @RequestParam (required = false, defaultValue = "") String name,
+            @RequestParam (required = false, defaultValue = "0") Double price
+    ){
+        log.info("Get search name: {}", name);
+        log.info("Get search price: {}", price);
+
+        return coffeeService.searchCoffeeByName(name);
+    }
+
+
+
 }
