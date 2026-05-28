@@ -32,15 +32,21 @@ public class CoffeeController {
 //    user for mark on parameter on mapping method,general data
     @GetMapping("/search")
     public List <CoffeeResponse> searchCoffeeByName(
-            @RequestParam (required = false, defaultValue = "") String name,
-            @RequestParam (required = false, defaultValue = "0") Double price
+            @RequestParam (required = false, defaultValue = "") String name
     ){
         log.info("Get search name: {}", name);
-        log.info("Get search price: {}", price);
 
         return coffeeService.searchCoffeeByName(name);
     }
 
+    @GetMapping("/price")
+    public List <CoffeeResponse> searchCoffeeByPrice(
+            @RequestParam (required = false, defaultValue = "0") @PathVariable Double price
+    ){
+        log.info("Get search price: {}", price);
+
+        return coffeeService.searchCoffeeByPrice(price);
+    }
 
 
 }

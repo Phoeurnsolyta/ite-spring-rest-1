@@ -12,4 +12,6 @@ public interface CoffeeService {
 
     List <CoffeeResponse> searchCoffeeByName(String name);
 
+    List <CoffeeResponse> searchCoffeeByPrice(Double price);
+
 }

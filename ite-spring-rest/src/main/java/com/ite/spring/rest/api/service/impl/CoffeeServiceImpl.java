@@ -7,6 +7,7 @@ import com.ite.spring.rest.api.service.CoffeeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CoffeeServiceImpl implements CoffeeService {
@@ -46,6 +47,16 @@ public class CoffeeServiceImpl implements CoffeeService {
         List<Coffee> coffees = coffeeRepository.beanCoffee();
         return coffees.stream()
                 .filter(coffee -> coffee.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(), coffee.getPrice()))
+                .toList();
+    }
+
+    @Override
+    public List <CoffeeResponse> searchCoffeeByPrice(Double price) {
+        List<Coffee> coffees = coffeeRepository.beanCoffee();
+
+        return coffees.stream()
+                .filter(coffee -> Objects.equals(coffee.getPrice(), price))
                 .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(), coffee.getPrice()))
                 .toList();
     }
