@@ -1,8 +1,12 @@
 package com.ite.spring.rest.api.controller;
 
+import com.ite.spring.rest.api.domain.Coffee;
 import com.ite.spring.rest.api.dto.CoffeeResponse;
+import com.ite.spring.rest.api.dto.CreateCoffeeRequest;
 import com.ite.spring.rest.api.service.CoffeeService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
+
     public CoffeeController(CoffeeService coffeeService) {
         this.coffeeService = coffeeService;
     }
@@ -46,6 +51,15 @@ public class CoffeeController {
         log.info("Get search price: {}", price);
 
         return coffeeService.searchCoffeeByPrice(price);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+
+    public CoffeeResponse createCoffee(@Valid @RequestBody CreateCoffeeRequest createCoffeeRequest) {
+
+//        log.info("Create coffee: {}", createCoffeeRequest);
+        return coffeeService.createCoffee(createCoffeeRequest);
     }
 
 

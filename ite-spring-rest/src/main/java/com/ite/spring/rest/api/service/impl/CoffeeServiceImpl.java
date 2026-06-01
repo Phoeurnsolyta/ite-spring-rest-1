@@ -2,12 +2,14 @@ package com.ite.spring.rest.api.service.impl;
 
 import com.ite.spring.rest.api.domain.Coffee;
 import com.ite.spring.rest.api.dto.CoffeeResponse;
+import com.ite.spring.rest.api.dto.CreateCoffeeRequest;
 import com.ite.spring.rest.api.repository.CoffeeRepository;
 import com.ite.spring.rest.api.service.CoffeeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class CoffeeServiceImpl implements CoffeeService {
@@ -16,49 +18,77 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
 
+
     public CoffeeServiceImpl(CoffeeRepository coffeeRepository) {
         this.coffeeRepository = coffeeRepository;
     }
     @Override
     public List<CoffeeResponse> getCoffees() {
 //        retrieve domain from repository
-        List<Coffee> coffees = coffeeRepository.beanCoffee();
+//        List<Coffee> coffees = coffeeRepository.beanCoffee();
 //        return dto - coffeeResponse
-        return coffees.stream()
+        return coffeeRepository.getCoffeeBeans()
+                .stream()
 //                .filter(coffee -> coffee.getCode()> 2)
-                .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(),coffee.getPrice()))
+                .map(coffee -> new CoffeeResponse(coffee.getId(),coffee.getName(), coffee.getDescription(),coffee.getPrice()))
                 .toList();
     }
 
     @Override
     public CoffeeResponse getCoffeeById(Long id) {
 
-        List<Coffee> coffees = coffeeRepository.beanCoffee();
+//        List<Coffee> coffees = coffeeRepository.beanCoffee();
 
-        return coffees.stream()
+        return coffeeRepository.getCoffeeBeans()
+                .stream()
                 .filter(coffee -> coffee.getId().equals(id))
-                .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(),coffee.getPrice()))
+                .map(coffee -> new CoffeeResponse(coffee.getId(),coffee.getName(), coffee.getDescription(),coffee.getPrice()))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public List<CoffeeResponse> searchCoffeeByName(String name) {
-        List<Coffee> coffees = coffeeRepository.beanCoffee();
-        return coffees.stream()
+//        List<Coffee> coffees = coffeeRepository.beanCoffee();
+
+        return coffeeRepository.getCoffeeBeans()
+                .stream()
                 .filter(coffee -> coffee.getName().toLowerCase().contains(name.toLowerCase()))
-                .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(), coffee.getPrice()))
+                .map(coffee -> new CoffeeResponse(coffee.getId(),coffee.getName(), coffee.getDescription(),coffee.getPrice()))
                 .toList();
     }
 
     @Override
     public List <CoffeeResponse> searchCoffeeByPrice(Double price) {
-        List<Coffee> coffees = coffeeRepository.beanCoffee();
+//        List<Coffee> coffees = coffeeRepository.beanCoffee();
 
-        return coffees.stream()
+        return coffeeRepository.getCoffeeBeans()
+                        .stream()
                 .filter(coffee -> Objects.equals(coffee.getPrice(), price))
-                .map(coffee -> new CoffeeResponse(coffee.getName(), coffee.getDescription(), coffee.getPrice()))
+                .map(coffee -> new CoffeeResponse(coffee.getId(),coffee.getName(), coffee.getDescription(),coffee.getPrice()))
                 .toList();
+    }
+
+    @Override
+    public CoffeeResponse createCoffee(CreateCoffeeRequest createCoffeeRequest) {
+        Coffee coffee = new Coffee();
+
+        coffee.setId(new Random().nextLong(999999));
+        coffee.setName(createCoffeeRequest.name());
+        coffee.setDescription(createCoffeeRequest.description());
+        coffee.setPrice(createCoffeeRequest.price());
+
+        boolean isExisting = coffeeRepository.getCoffeeBeans()
+                .stream()
+                .anyMatch(c -> c.getId().equals(coffee.getId()));
+
+        if (isExisting) {
+            throw new RuntimeException("Coffee ID already exists");
+        }
+
+        coffeeRepository.getCoffeeBeans().add(coffee);
+
+        return new CoffeeResponse(coffee.getId(),coffee.getName(), coffee.getDescription(), coffee.getPrice());
     }
 
 

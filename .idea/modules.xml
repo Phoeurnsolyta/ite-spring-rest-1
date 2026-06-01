@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ite.spring.rest.api.ite-spring-rest.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ite.spring.rest.api.ite-spring-rest.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ite-spring-rest.iml" filepath="$PROJECT_DIR$/.idea/ite-spring-rest.iml" />
     </modules>
   </component>
