@@ -3,10 +3,12 @@ package com.ite.spring.rest.api.controller;
 import com.ite.spring.rest.api.domain.Coffee;
 import com.ite.spring.rest.api.dto.CoffeeResponse;
 import com.ite.spring.rest.api.dto.CreateCoffeeRequest;
+import com.ite.spring.rest.api.dto.UpdateCoffeeRequest;
 import com.ite.spring.rest.api.service.CoffeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,6 +62,22 @@ public class CoffeeController {
 
 //        log.info("Create coffee: {}", createCoffeeRequest);
         return coffeeService.createCoffee(createCoffeeRequest);
+    }
+
+    @PutMapping("/{id}")
+    public CoffeeResponse updateCoffeeById(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateCoffeeRequest updateCoffeeRequest
+    ) {
+        return coffeeService.updateCoffeeById(id, updateCoffeeRequest);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteCoffeeById(@PathVariable Long id) {
+        coffeeService.deleteCoffeeById(id);
+
+        log.info("Deleted coffee with id: {}", id);
     }
 
 

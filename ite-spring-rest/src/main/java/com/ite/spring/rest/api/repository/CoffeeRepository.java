@@ -1,11 +1,9 @@
 package com.ite.spring.rest.api.repository;
 
 import com.ite.spring.rest.api.domain.Coffee;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Repository;
 
+import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
